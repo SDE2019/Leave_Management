@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LeaveDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Leave">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LeaveDescription" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="LeaveType" />
+            <PropertyRef Name="LeaveTypeCount" />
+            <PropertyRef Name="TotalLeaveCount" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="LeaveDescription" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="TempContact" Type="varchar" MaxLength="10" />
+          <Property Name="StartDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="EndDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LeaveType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LeaveTypeCount" Type="smallint" Nullable="false" />
+          <Property Name="TotalLeaveCount" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Photo" Type="varbinary(max)" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Designation_Id" Type="int" Nullable="false" />
+          <Property Name="Pan" Type="nvarchar" MaxLength="10" />
+          <Property Name="Aadhar" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="Phno" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="Fingerprint" Type="varbinary(max)" />
+          <Property Name="Dept_Id" Type="int" Nullable="false" />
+          <Property Name="Qualification" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pub_No" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prev_Exp" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Events" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Project_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Leave_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LeaveDBModelStoreContainer">
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Leave" EntityType="Self.Leave" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Leave].[ID] AS [ID], 
+    [Leave].[LeaveDescription] AS [LeaveDescription], 
+    [Leave].[TempContact] AS [TempContact], 
+    [Leave].[StartDate] AS [StartDate], 
+    [Leave].[EndDate] AS [EndDate], 
+    [Leave].[LeaveType] AS [LeaveType], 
+    [Leave].[LeaveTypeCount] AS [LeaveTypeCount], 
+    [Leave].[TotalLeaveCount] AS [TotalLeaveCount]
+    FROM [dbo].[Leave] AS [Leave]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="Leave" EntitySet="Leave" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LeaveDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Designation_Id" Type="Int32" Nullable="false" />
+          <Property Name="Pan" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Aadhar" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="Phno" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="Fingerprint" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Dept_Id" Type="Int32" Nullable="false" />
+          <Property Name="Qualification" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pub_No" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prev_Exp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Events" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Project_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Leaves" Relationship="Self.FK_Leave_Teacher" FromRole="Teacher" ToRole="Leave" />
+        </EntityType>
+        <EntityType Name="Leave">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LeaveDescription" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="LeaveType" />
+            <PropertyRef Name="LeaveTypeCount" />
+            <PropertyRef Name="TotalLeaveCount" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LeaveDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TempContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LeaveTypeCount" Type="Int16" Nullable="false" />
+          <Property Name="TotalLeaveCount" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Leave_Teacher" FromRole="Leave" ToRole="Teacher" />
+        </EntityType>
+        <Association Name="FK_Leave_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LeaveDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <EntitySet Name="Leaves" EntityType="Self.Leave" />
+          <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LeaveDBModelStoreContainer" CdmEntityContainer="LeaveDBEntities">
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="LeaveDBModel.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Designation_Id" ColumnName="Designation_Id" />
+                <ScalarProperty Name="Pan" ColumnName="Pan" />
+                <ScalarProperty Name="Aadhar" ColumnName="Aadhar" />
+                <ScalarProperty Name="Phno" ColumnName="Phno" />
+                <ScalarProperty Name="Fingerprint" ColumnName="Fingerprint" />
+                <ScalarProperty Name="Dept_Id" ColumnName="Dept_Id" />
+                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+                <ScalarProperty Name="Pub_No" ColumnName="Pub_No" />
+                <ScalarProperty Name="Prev_Exp" ColumnName="Prev_Exp" />
+                <ScalarProperty Name="Events" ColumnName="Events" />
+                <ScalarProperty Name="Project_Id" ColumnName="Project_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="LeaveDBModel.Leave">
+              <MappingFragment StoreEntitySet="Leave">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LeaveDescription" ColumnName="LeaveDescription" />
+                <ScalarProperty Name="TempContact" ColumnName="TempContact" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="LeaveTypeCount" ColumnName="LeaveTypeCount" />
+                <ScalarProperty Name="TotalLeaveCount" ColumnName="TotalLeaveCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
