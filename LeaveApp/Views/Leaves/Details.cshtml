@@ -11,11 +11,59 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.LeaveDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LeaveDescription)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.TempContact)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.TempContact)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LeaveType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LeaveType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LeaveTypeCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LeaveTypeCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalLeaveCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalLeaveCount)
         </dd>
 
         <dt>
@@ -29,6 +77,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.LeaveID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

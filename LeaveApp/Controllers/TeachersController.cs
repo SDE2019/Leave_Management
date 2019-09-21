@@ -10,112 +10,107 @@ using LeaveApp;
 
 namespace LeaveApp.Controllers
 {
-    public class LeavesController : Controller
+    public class TeachersController : Controller
     {
         private LeaveDBEntities db = new LeaveDBEntities();
 
-        // GET: Leaves
+        // GET: Teachers
         public ActionResult Index()
         {
-            var leaves = db.Leaves.Include(l => l.Teacher);
-            return View(leaves.ToList());
+            return View(db.Teachers.ToList());
         }
 
-        // GET: Leaves/Details/5
-        public ActionResult Details(long? id)
+        // GET: Teachers/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Leave leave = db.Leaves.Find(id);
-            if (leave == null)
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
-            return View(leave);
+            return View(teacher);
         }
 
-        // GET: Leaves/Create
+        // GET: Teachers/Create
         public ActionResult Create()
         {
-            ViewBag.ID = new SelectList(db.Teachers, "Id", "Name");
             return View();
         }
 
-        // POST: Leaves/Create
+        // POST: Teachers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LeaveID,ID,LeaveDescription,TempContact,StartDate,EndDate,LeaveType,LeaveTypeCount,TotalLeaveCount")] Leave leave)
+        public ActionResult Create([Bind(Include = "Id,Name,Photo,Address,DOB,Designation_Id,Pan,Aadhar,Phno,Fingerprint,Dept_Id,Qualification,Pub_No,Prev_Exp,Events,Project_Id")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                db.Leaves.Add(leave);
+                db.Teachers.Add(teacher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ID = new SelectList(db.Teachers, "Id", "Name", leave.ID);
-            return View(leave);
+            return View(teacher);
         }
 
-        // GET: Leaves/Edit/5
-        public ActionResult Edit(long? id)
+        // GET: Teachers/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Leave leave = db.Leaves.Find(id);
-            if (leave == null)
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ID = new SelectList(db.Teachers, "Id", "Name", leave.ID);
-            return View(leave);
+            return View(teacher);
         }
 
-        // POST: Leaves/Edit/5
+        // POST: Teachers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "LeaveID,ID,LeaveDescription,TempContact,StartDate,EndDate,LeaveType,LeaveTypeCount,TotalLeaveCount")] Leave leave)
+        public ActionResult Edit([Bind(Include = "Id,Name,Photo,Address,DOB,Designation_Id,Pan,Aadhar,Phno,Fingerprint,Dept_Id,Qualification,Pub_No,Prev_Exp,Events,Project_Id")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(leave).State = EntityState.Modified;
+                db.Entry(teacher).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ID = new SelectList(db.Teachers, "Id", "Name", leave.ID);
-            return View(leave);
+            return View(teacher);
         }
 
-        // GET: Leaves/Delete/5
-        public ActionResult Delete(long? id)
+        // GET: Teachers/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Leave leave = db.Leaves.Find(id);
-            if (leave == null)
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
-            return View(leave);
+            return View(teacher);
         }
 
-        // POST: Leaves/Delete/5
+        // POST: Teachers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            Leave leave = db.Leaves.Find(id);
-            db.Leaves.Remove(leave);
+            Teacher teacher = db.Teachers.Find(id);
+            db.Teachers.Remove(teacher);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

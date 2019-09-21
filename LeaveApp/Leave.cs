@@ -14,6 +14,7 @@ namespace LeaveApp
     
     public partial class Leave
     {
+        public long LeaveID { get; set; }
         public string ID { get; set; }
         public string LeaveDescription { get; set; }
         public string TempContact { get; set; }

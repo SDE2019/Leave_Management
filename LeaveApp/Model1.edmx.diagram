@@ -4,9 +4,9 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="86cc2542d38a4b0fa6a7b9343ca73a0d" Name="Diagram1">
-        <EntityTypeShape EntityType="LeaveDBModel.Teacher" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+      <Diagram DiagramId="01dd8ab624b54a79a5d06d338e74a10f" Name="Diagram1">
         <EntityTypeShape EntityType="LeaveDBModel.Leave" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LeaveDBModel.Teacher" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="LeaveDBModel.FK_Leave_Teacher" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

@@ -5,18 +5,11 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="LeaveDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Leave">
           <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="LeaveDescription" />
-            <PropertyRef Name="StartDate" />
-            <PropertyRef Name="EndDate" />
-            <PropertyRef Name="LeaveType" />
-            <PropertyRef Name="LeaveTypeCount" />
-            <PropertyRef Name="TotalLeaveCount" />
+            <PropertyRef Name="LeaveID" />
           </Key>
+          <Property Name="LeaveID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="LeaveDescription" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="TempContact" Type="varchar" MaxLength="10" />
@@ -60,19 +53,8 @@ warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key def
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="LeaveDBModelStoreContainer">
+          <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Leave" EntityType="Self.Leave" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Leave].[ID] AS [ID], 
-    [Leave].[LeaveDescription] AS [LeaveDescription], 
-    [Leave].[TempContact] AS [TempContact], 
-    [Leave].[StartDate] AS [StartDate], 
-    [Leave].[EndDate] AS [EndDate], 
-    [Leave].[LeaveType] AS [LeaveType], 
-    [Leave].[LeaveTypeCount] AS [LeaveTypeCount], 
-    [Leave].[TotalLeaveCount] AS [TotalLeaveCount]
-    FROM [dbo].[Leave] AS [Leave]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
             <End Role="Teacher" EntitySet="Teacher" />
             <End Role="Leave" EntitySet="Leave" />
@@ -83,6 +65,21 @@ warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key def
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LeaveDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Leave">
+          <Key>
+            <PropertyRef Name="LeaveID" />
+          </Key>
+          <Property Name="LeaveID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LeaveDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TempContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LeaveTypeCount" Type="Int16" Nullable="false" />
+          <Property Name="TotalLeaveCount" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Leave_Teacher" FromRole="Leave" ToRole="Teacher" />
+        </EntityType>
         <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="Id" />
@@ -105,26 +102,6 @@ warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key def
           <Property Name="Project_Id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Leaves" Relationship="Self.FK_Leave_Teacher" FromRole="Teacher" ToRole="Leave" />
         </EntityType>
-        <EntityType Name="Leave">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="LeaveDescription" />
-            <PropertyRef Name="StartDate" />
-            <PropertyRef Name="EndDate" />
-            <PropertyRef Name="LeaveType" />
-            <PropertyRef Name="LeaveTypeCount" />
-            <PropertyRef Name="TotalLeaveCount" />
-          </Key>
-          <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LeaveDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TempContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LeaveTypeCount" Type="Int16" Nullable="false" />
-          <Property Name="TotalLeaveCount" Type="Int16" Nullable="false" />
-          <NavigationProperty Name="Teacher" Relationship="Self.FK_Leave_Teacher" FromRole="Leave" ToRole="Teacher" />
-        </EntityType>
         <Association Name="FK_Leave_Teacher">
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
@@ -138,8 +115,8 @@ warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key def
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="LeaveDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
           <EntitySet Name="Leaves" EntityType="Self.Leave" />
+          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
           <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
             <End Role="Teacher" EntitySet="Teachers" />
             <End Role="Leave" EntitySet="Leaves" />
@@ -151,6 +128,21 @@ warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key def
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LeaveDBModelStoreContainer" CdmEntityContainer="LeaveDBEntities">
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="LeaveDBModel.Leave">
+              <MappingFragment StoreEntitySet="Leave">
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LeaveDescription" ColumnName="LeaveDescription" />
+                <ScalarProperty Name="TempContact" ColumnName="TempContact" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="LeaveTypeCount" ColumnName="LeaveTypeCount" />
+                <ScalarProperty Name="TotalLeaveCount" ColumnName="TotalLeaveCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Teachers">
             <EntityTypeMapping TypeName="LeaveDBModel.Teacher">
               <MappingFragment StoreEntitySet="Teacher">
@@ -170,20 +162,6 @@ warning 6002: The table/view 'LeaveDB.dbo.Leave' does not have a primary key def
                 <ScalarProperty Name="Prev_Exp" ColumnName="Prev_Exp" />
                 <ScalarProperty Name="Events" ColumnName="Events" />
                 <ScalarProperty Name="Project_Id" ColumnName="Project_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Leaves">
-            <EntityTypeMapping TypeName="LeaveDBModel.Leave">
-              <MappingFragment StoreEntitySet="Leave">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="LeaveDescription" ColumnName="LeaveDescription" />
-                <ScalarProperty Name="TempContact" ColumnName="TempContact" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
-                <ScalarProperty Name="LeaveTypeCount" ColumnName="LeaveTypeCount" />
-                <ScalarProperty Name="TotalLeaveCount" ColumnName="TotalLeaveCount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
