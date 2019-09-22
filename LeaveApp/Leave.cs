@@ -11,15 +11,22 @@ namespace LeaveApp
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class Leave
     {
+        [Required]
         public long LeaveID { get; set; }
+        [Required]
         public string ID { get; set; }
+        [Required]
         public string LeaveDescription { get; set; }
         public string TempContact { get; set; }
+        [Required]
         public System.DateTime StartDate { get; set; }
+        [Required]
         public System.DateTime EndDate { get; set; }
+        [Required]
         public string LeaveType { get; set; }
         public short LeaveTypeCount { get; set; }
         public short TotalLeaveCount { get; set; }
