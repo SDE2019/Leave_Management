@@ -7,37 +7,28 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LeaveApp
+namespace LeaveApp.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Teacher
+    public partial class AspNetRole
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Teacher()
+        public AspNetRole()
         {
-            this.Leaves = new HashSet<Leave>();
+            this.AspNetRoleClaims = new HashSet<AspNetRoleClaim>();
+            this.AspNetUsers = new HashSet<AspNetUser>();
         }
     
         public string Id { get; set; }
+        public string ConcurrencyStamp { get; set; }
         public string Name { get; set; }
-        public byte[] Photo { get; set; }
-        public string Address { get; set; }
-        public Nullable<System.DateTime> DOB { get; set; }
-        public int Designation_Id { get; set; }
-        public string Pan { get; set; }
-        public Nullable<decimal> Aadhar { get; set; }
-        public Nullable<decimal> Phno { get; set; }
-        public byte[] Fingerprint { get; set; }
-        public int Dept_Id { get; set; }
-        public string Qualification { get; set; }
-        public string Pub_No { get; set; }
-        public string Prev_Exp { get; set; }
-        public string Events { get; set; }
-        public int Project_Id { get; set; }
+        public string NormalizedName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Leave> Leaves { get; set; }
+        public virtual ICollection<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
     }
 }

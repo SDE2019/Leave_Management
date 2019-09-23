@@ -7,12 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LeaveApp
+namespace LeaveApp.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    
+
     public partial class Leave
     {
         [Required]
@@ -20,17 +21,22 @@ namespace LeaveApp
         [Required]
         public string ID { get; set; }
         [Required]
+        [DisplayName("Description Of Leave")]
         public string LeaveDescription { get; set; }
+        [DisplayName("Temp Contact")]
         public string TempContact { get; set; }
         [Required]
+        [DisplayName("Start Date")]
         public System.DateTime StartDate { get; set; }
         [Required]
+        [DisplayName("End Date")]
         public System.DateTime EndDate { get; set; }
         [Required]
+        [DisplayName("Leave Type")]
         public string LeaveType { get; set; }
         public short LeaveTypeCount { get; set; }
         public short TotalLeaveCount { get; set; }
-    
+
         public virtual Teacher Teacher { get; set; }
     }
 }
