@@ -95,6 +95,14 @@
           <Property Name="LeaveTypeCount" Type="smallint" Nullable="false" />
           <Property Name="TotalLeaveCount" Type="smallint" Nullable="false" />
         </EntityType>
+        <EntityType Name="RoleTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="UserRole" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
         <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="Id" />
@@ -212,6 +220,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RoleTable_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="RoleTable" Type="Self.RoleTable" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleTable">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="getfromleavetb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="leaveid" Type="bigint" Mode="In" />
+          <Parameter Name="id" Type="nvarchar" Mode="In" />
+          <Parameter Name="leavedescription" Type="nvarchar" Mode="In" />
+          <Parameter Name="tempcontact" Type="nvarchar" Mode="In" />
+          <Parameter Name="startdate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="enddate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="leavetype" Type="nvarchar" Mode="In" />
+          <Parameter Name="leavecount" Type="smallint" Mode="In" />
+          <Parameter Name="totalleavecount" Type="smallint" Mode="In" />
+          <Parameter Name="status" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="LeaveDBModelStoreContainer">
           <EntitySet Name="AspNetRoleClaims" EntityType="Self.AspNetRoleClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -221,6 +253,7 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserTokens" EntityType="Self.AspNetUserTokens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleTable" EntityType="Self.RoleTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AspNetRoleClaims_AspNetRoles_RoleId" Association="Self.FK_AspNetRoleClaims_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -249,6 +282,10 @@
           <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
             <End Role="Teacher" EntitySet="Teacher" />
             <End Role="Leave" EntitySet="Leave" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleTable_Teacher" Association="Self.FK_RoleTable_Teacher">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="RoleTable" EntitySet="RoleTable" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -291,6 +328,7 @@
           <Property Name="Events" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Project_Id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Leaves" Relationship="Self.FK_Leave_Teacher" FromRole="Teacher" ToRole="Leave" />
+          <NavigationProperty Name="RoleTable" Relationship="LeaveDBModel.FK_RoleTable_Teacher" FromRole="Teacher" ToRole="RoleTable" />
         </EntityType>
         <Association Name="FK_Leave_Teacher">
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
@@ -337,6 +375,23 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="RoleTables" EntityType="LeaveDBModel.RoleTable" />
+          <AssociationSet Name="FK_RoleTable_Teacher" Association="LeaveDBModel.FK_RoleTable_Teacher">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="RoleTable" EntitySet="RoleTables" />
+          </AssociationSet>
+          <FunctionImport Name="getfromleavetb" ReturnType="Collection(LeaveDBModel.getfromleavetb_Result)">
+            <Parameter Name="leaveid" Mode="In" Type="Int64" />
+            <Parameter Name="id" Mode="In" Type="String" />
+            <Parameter Name="leavedescription" Mode="In" Type="String" />
+            <Parameter Name="tempcontact" Mode="In" Type="String" />
+            <Parameter Name="startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="enddate" Mode="In" Type="DateTime" />
+            <Parameter Name="leavetype" Mode="In" Type="String" />
+            <Parameter Name="leavecount" Mode="In" Type="Int16" />
+            <Parameter Name="totalleavecount" Mode="In" Type="Int16" />
+            <Parameter Name="status" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AspNetRoleClaim">
           <Key>
@@ -476,6 +531,38 @@
           <End Type="LeaveDBModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="LeaveDBModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="RoleTable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserRole" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Teacher" Relationship="LeaveDBModel.FK_RoleTable_Teacher" FromRole="RoleTable" ToRole="Teacher" />
+        </EntityType>
+        <Association Name="FK_RoleTable_Teacher">
+          <End Type="LeaveDBModel.Teacher" Role="Teacher" Multiplicity="1" />
+          <End Type="LeaveDBModel.RoleTable" Role="RoleTable" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoleTable">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="getfromleavetb_Result">
+          <Property Type="Int64" Name="LeaveID" Nullable="false" />
+          <Property Type="String" Name="ID" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="LeaveDescription" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="TempContact" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="LeaveType" Nullable="false" MaxLength="50" />
+          <Property Type="Int16" Name="LeaveTypeCount" Nullable="false" />
+          <Property Type="Int16" Name="TotalLeaveCount" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -598,6 +685,30 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="RoleTables">
+            <EntityTypeMapping TypeName="LeaveDBModel.RoleTable">
+              <MappingFragment StoreEntitySet="RoleTable">
+                <ScalarProperty Name="UserRole" ColumnName="UserRole" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="getfromleavetb" FunctionName="LeaveDBModel.Store.getfromleavetb">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LeaveDBModel.getfromleavetb_Result">
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LeaveDescription" ColumnName="LeaveDescription" />
+                <ScalarProperty Name="TempContact" ColumnName="TempContact" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="LeaveTypeCount" ColumnName="LeaveTypeCount" />
+                <ScalarProperty Name="TotalLeaveCount" ColumnName="TotalLeaveCount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

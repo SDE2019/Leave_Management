@@ -19,6 +19,8 @@
         <AssociationConnector Association="LeaveDBModel.FK_AspNetUserLogins_AspNetUsers_UserId" />
         <AssociationConnector Association="LeaveDBModel.FK_AspNetUserTokens_AspNetUsers_UserId" />
         <AssociationConnector Association="LeaveDBModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="LeaveDBModel.RoleTable" Width="1.5" PointX="3" PointY="6.375" />
+        <AssociationConnector Association="LeaveDBModel.FK_RoleTable_Teacher" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,17 +12,11 @@ namespace LeaveApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Leave
+    public partial class RoleTable
     {
-        public long LeaveID { get; set; }
         public string ID { get; set; }
-        public string LeaveDescription { get; set; }
-        public string TempContact { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
-        public string LeaveType { get; set; }
-        public short LeaveTypeCount { get; set; }
-        public short TotalLeaveCount { get; set; }
+        public string Password { get; set; }
+        public string UserRole { get; set; }
     
         public virtual Teacher Teacher { get; set; }
     }

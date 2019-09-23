@@ -1,4 +1,5 @@
-﻿@model LeaveApp.Models.Leave
+﻿
+@model LeaveApp.Models.Leave
 
 @{
     ViewBag.Title = "Details";
@@ -11,13 +12,12 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.LeaveDescription)
+            @Html.DisplayNameFor(model => model.LeaveType)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LeaveDescription)
+            @Html.DisplayFor(model => model.LeaveType)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.TempContact)
         </dt>
@@ -40,14 +40,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.EndDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LeaveType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LeaveType)
         </dd>
 
         <dt>

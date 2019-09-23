@@ -10,9 +10,8 @@
 namespace LeaveApp.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Leave
+    public partial class getfromleavetb_Result
     {
         public long LeaveID { get; set; }
         public string ID { get; set; }
@@ -23,7 +22,5 @@ namespace LeaveApp.Models
         public string LeaveType { get; set; }
         public short LeaveTypeCount { get; set; }
         public short TotalLeaveCount { get; set; }
-    
-        public virtual Teacher Teacher { get; set; }
     }
 }

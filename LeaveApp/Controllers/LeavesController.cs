@@ -131,6 +131,7 @@ namespace LeaveApp.Controllers
             ViewBag.ID = new SelectList(db.Teachers, "Id", "Name", leave.ID);
             return View(leave);
         }
+       
         // POST: Leaves/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
