@@ -108,29 +108,6 @@ namespace LeaveApp.Controllers
             }
             return View(leave);
         }
-        public ActionResult ApplyLeave()
-        {
-            ViewBag.ID = new SelectList(db.Teachers, "Id", "Name");
-            return View();
-        }
-
-        // POST: Leaves/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ApplyLeave([Bind(Include = "LeaveID,ID,LeaveDescription,TempContact,StartDate,EndDate,LeaveType,LeaveTypeCount,TotalLeaveCount")] Leave leave)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Leaves.Add(leave);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.ID = new SelectList(db.Teachers, "Id", "Name", leave.ID);
-            return View(leave);
-        }
        
         // POST: Leaves/Delete/5
         [HttpPost, ActionName("Delete")]

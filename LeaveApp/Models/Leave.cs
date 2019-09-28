@@ -23,6 +23,7 @@ namespace LeaveApp.Models
         public string LeaveType { get; set; }
         public short LeaveTypeCount { get; set; }
         public short TotalLeaveCount { get; set; }
+        public string Status { get; set; }
     
         public virtual Teacher Teacher { get; set; }
     }

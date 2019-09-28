@@ -12,8 +12,6 @@ namespace LeaveApp.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
     
     public partial class LeaveDBEntities : DbContext
     {
@@ -29,57 +27,5 @@ namespace LeaveApp.Models
     
         public virtual DbSet<Leave> Leaves { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
-        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
-        public virtual DbSet<RoleTable> RoleTables { get; set; }
-    
-        public virtual ObjectResult<getfromleavetb_Result> getfromleavetb(Nullable<long> leaveid, string id, string leavedescription, string tempcontact, Nullable<System.DateTime> startdate, Nullable<System.DateTime> enddate, string leavetype, Nullable<short> leavecount, Nullable<short> totalleavecount, string status)
-        {
-            var leaveidParameter = leaveid.HasValue ?
-                new ObjectParameter("leaveid", leaveid) :
-                new ObjectParameter("leaveid", typeof(long));
-    
-            var idParameter = id != null ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(string));
-    
-            var leavedescriptionParameter = leavedescription != null ?
-                new ObjectParameter("leavedescription", leavedescription) :
-                new ObjectParameter("leavedescription", typeof(string));
-    
-            var tempcontactParameter = tempcontact != null ?
-                new ObjectParameter("tempcontact", tempcontact) :
-                new ObjectParameter("tempcontact", typeof(string));
-    
-            var startdateParameter = startdate.HasValue ?
-                new ObjectParameter("startdate", startdate) :
-                new ObjectParameter("startdate", typeof(System.DateTime));
-    
-            var enddateParameter = enddate.HasValue ?
-                new ObjectParameter("enddate", enddate) :
-                new ObjectParameter("enddate", typeof(System.DateTime));
-    
-            var leavetypeParameter = leavetype != null ?
-                new ObjectParameter("leavetype", leavetype) :
-                new ObjectParameter("leavetype", typeof(string));
-    
-            var leavecountParameter = leavecount.HasValue ?
-                new ObjectParameter("leavecount", leavecount) :
-                new ObjectParameter("leavecount", typeof(short));
-    
-            var totalleavecountParameter = totalleavecount.HasValue ?
-                new ObjectParameter("totalleavecount", totalleavecount) :
-                new ObjectParameter("totalleavecount", typeof(short));
-    
-            var statusParameter = status != null ?
-                new ObjectParameter("status", status) :
-                new ObjectParameter("status", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getfromleavetb_Result>("getfromleavetb", leaveidParameter, idParameter, leavedescriptionParameter, tempcontactParameter, startdateParameter, enddateParameter, leavetypeParameter, leavecountParameter, totalleavecountParameter, statusParameter);
-        }
     }
 }
