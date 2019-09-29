@@ -5,7 +5,8 @@
 }
 <h2>Leave Application</h2>
 
-
+@Html.Hidden("ID", @HttpContext.Current.User.Identity.Name);
+@Html.Hidden("Status", "Not Approved");
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -70,10 +71,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

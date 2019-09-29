@@ -49,9 +49,8 @@ namespace LeaveApp.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "ID")]
+        public string Id { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +63,10 @@ namespace LeaveApp.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "ID")]
+        public string Id { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

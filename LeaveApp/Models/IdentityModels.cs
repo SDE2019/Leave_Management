@@ -21,7 +21,7 @@ namespace LeaveApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("LeaveDBEntities", throwIfV1Schema: false)
         {
         }
 

@@ -12,18 +12,13 @@ namespace LeaveApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Leave
+    public partial class User
     {
-        public long LeaveID { get; set; }
-        public string ID { get; set; }
-        public string LeaveDescription { get; set; }
-        public Nullable<int> TempContact { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
-        public string LeaveType { get; set; }
-        public int LeaveTypeCount { get; set; }
-        public int TotalLeaveCount { get; set; }
-        public string Status { get; set; }
+        public string Id { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public bool IsEmailVerified { get; set; }
+        public System.Guid ActivationCode { get; set; }
     
         public virtual Teacher Teacher { get; set; }
     }

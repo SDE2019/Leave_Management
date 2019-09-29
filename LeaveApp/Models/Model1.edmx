@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LeaveDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LeaveDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Leave">
           <Key>
             <PropertyRef Name="LeaveID" />
@@ -12,7 +12,7 @@
           <Property Name="LeaveID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="LeaveDescription" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="TempContact" Type="varchar" MaxLength="10" />
+          <Property Name="TempContact" Type="int" />
           <Property Name="StartDate" Type="smalldatetime" Nullable="false" />
           <Property Name="EndDate" Type="smalldatetime" Nullable="false" />
           <Property Name="LeaveType" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -41,6 +41,16 @@
           <Property Name="Events" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Project_Id" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
+          <Property Name="ActivationCode" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Leave_Teacher">
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
@@ -53,35 +63,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="LeaveDBModelStoreContainer">
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
             <End Role="Teacher" EntitySet="Teacher" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_Teacher" Association="Self.FK_User_Teacher">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LeaveDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Leave">
-          <Key>
-            <PropertyRef Name="LeaveID" />
-          </Key>
-          <Property Name="LeaveID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LeaveDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TempContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LeaveTypeCount" Type="Int16" Nullable="false" />
-          <Property Name="TotalLeaveCount" Type="Int16" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Teacher" Relationship="Self.FK_Leave_Teacher" FromRole="Leave" ToRole="Teacher" />
-        </EntityType>
         <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="Id" />
@@ -102,11 +112,64 @@
           <Property Name="Prev_Exp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Events" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Project_Id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Leaves" Relationship="Self.FK_Leave_Teacher" FromRole="Teacher" ToRole="Leave" />
+          <NavigationProperty Name="User" Relationship="LeaveDBModel.FK_User_Teacher" FromRole="Teacher" ToRole="User" />
+          <NavigationProperty Name="Leaves" Relationship="LeaveDBModel.FK_Leave_Teacher" FromRole="Teacher" ToRole="Leave" />
+        </EntityType>
+        <EntityContainer Name="LeaveDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <EntitySet Name="Users" EntityType="LeaveDBModel.User" />
+          <AssociationSet Name="FK_User_Teacher" Association="LeaveDBModel.FK_User_Teacher">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Leaves" EntityType="LeaveDBModel.Leave" />
+          <AssociationSet Name="FK_Leave_Teacher" Association="LeaveDBModel.FK_Leave_Teacher">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
+          <Property Name="ActivationCode" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Teacher" Relationship="LeaveDBModel.FK_User_Teacher" FromRole="User" ToRole="Teacher" />
+        </EntityType>
+        <Association Name="FK_User_Teacher">
+          <End Type="LeaveDBModel.Teacher" Role="Teacher" Multiplicity="1" />
+          <End Type="LeaveDBModel.User" Role="User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Leave">
+          <Key>
+            <PropertyRef Name="LeaveID" />
+          </Key>
+          <Property Name="LeaveID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LeaveDescription" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TempContact" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LeaveType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LeaveTypeCount" Type="Int16" Nullable="false" />
+          <Property Name="TotalLeaveCount" Type="Int16" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Teacher" Relationship="LeaveDBModel.FK_Leave_Teacher" FromRole="Leave" ToRole="Teacher" />
         </EntityType>
         <Association Name="FK_Leave_Teacher">
-          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
-          <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
+          <End Type="LeaveDBModel.Teacher" Role="Teacher" Multiplicity="1" />
+          <End Type="LeaveDBModel.Leave" Role="Leave" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Teacher">
               <PropertyRef Name="Id" />
@@ -116,36 +179,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="LeaveDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Leaves" EntityType="Self.Leave" />
-          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
-          <AssociationSet Name="FK_Leave_Teacher" Association="Self.FK_Leave_Teacher">
-            <End Role="Teacher" EntitySet="Teachers" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LeaveDBModelStoreContainer" CdmEntityContainer="LeaveDBEntities">
-          <EntitySetMapping Name="Leaves">
-            <EntityTypeMapping TypeName="LeaveDBModel.Leave">
-              <MappingFragment StoreEntitySet="Leave">
-                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="LeaveDescription" ColumnName="LeaveDescription" />
-                <ScalarProperty Name="TempContact" ColumnName="TempContact" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
-                <ScalarProperty Name="LeaveTypeCount" ColumnName="LeaveTypeCount" />
-                <ScalarProperty Name="TotalLeaveCount" ColumnName="TotalLeaveCount" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Teachers">
             <EntityTypeMapping TypeName="LeaveDBModel.Teacher">
               <MappingFragment StoreEntitySet="Teacher">
@@ -165,6 +204,33 @@
                 <ScalarProperty Name="Prev_Exp" ColumnName="Prev_Exp" />
                 <ScalarProperty Name="Events" ColumnName="Events" />
                 <ScalarProperty Name="Project_Id" ColumnName="Project_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="LeaveDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+                <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="LeaveDBModel.Leave">
+              <MappingFragment StoreEntitySet="Leave">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalLeaveCount" ColumnName="TotalLeaveCount" />
+                <ScalarProperty Name="LeaveTypeCount" ColumnName="LeaveTypeCount" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="TempContact" ColumnName="TempContact" />
+                <ScalarProperty Name="LeaveDescription" ColumnName="LeaveDescription" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

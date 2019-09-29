@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "AppSuccess";
+}
+
+<h2>Leave Successfully Applied</h2>
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", "User", FormMethod.Post, new { id = "logoutform" }))
+    {
+        <a href="javascript: document.getElementById('logoutform')">Logout</a>
+    }
+}
